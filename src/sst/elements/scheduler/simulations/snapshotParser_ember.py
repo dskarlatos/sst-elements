@@ -54,13 +54,18 @@ def parse_emberOut (options):
     InfoPair = []
 
     for line in fo:
+        sys.stderr.writelines("all   - " + line)
         if line.startswith('Simulation is complete, simulated time'):
+            sys.stderr.writelines("first-- " + line)
             InfoPair.append(grep_timeInfo(line, 'SimComplete'))
             break
         elif line.startswith('Job Finished'):
+            sys.stderr.writelines("second- " + line)
             InfoPair.append(grep_timeInfo(line, 'JobFinished'))
     
     fo.close()
+
+    sys.stderr.write(" John at line 65   eol \n")
 
     return (InfoPair)
 
@@ -171,7 +176,10 @@ def generate_scheduler_inputs (InfoPair, TimeObject, JobObjects, options):
     # If there are any jobs that are finished, append the emberCompletedFile
     completedJobsList = []
     for emberTime, jobNum in InfoPair:
+        sys.stderr.write(" John in loop JobNum is %d\n" % jobNum)
         if jobNum != -1:
+            sys.stderr.write(" num\t%d\n" % jobNum)
+            sys.stderr.write("%d emberTime \n" % emberTime)
             for Job in JobObjects:
                 if Job.jobNum == jobNum:
                     completedJobsList.append(jobNum)
